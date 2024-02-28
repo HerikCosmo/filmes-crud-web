@@ -8,6 +8,7 @@ onBeforeMount(() => {
   axios.get('http://localhost:8080/movies')
   .then(response => {
     movies.value = response.data
+    console.log(response.data)
   })
   .catch(error => {
     console.log(error)
