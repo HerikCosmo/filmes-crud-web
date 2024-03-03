@@ -1,29 +1,34 @@
-# demoweb
+# CRUD Filmes
 
-This template should help get you started developing with Vue 3 in Vite.
+Aplicação fullstack focada em fazer um gerenciamento básico de filmes.
 
-## Recommended IDE Setup
+## Funcionalidades
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+- Listar filmes;
+- Realizar cadastro de filme;
+- Visualizar informações de um filme;
+- Atualizar informações do filme;
+- Apagar filme.
 
-## Customize configuration
+## Diagrama de Classes
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+![diagrama](./diagrama_classes.drawio.png)
 
-## Project Setup
+## Tecnologias
 
-```sh
-npm install
-```
+- Vue3;
+- Vuetify;
+- VueRouter;
+- Axios;
+- Spring Boot;
+- PostgreSQL.
 
-### Compile and Hot-Reload for Development
+## Rotas da API
 
-```sh
-npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
+| Método HTTP | URL          |
+| ----------- | ------------ |
+| GET         | /movies      |
+| POST        | /movies      |
+| GET         | /movies/{id} |
+| UPDATE      | /movies/{id} |
+| DELETE      | /movies/{id} |
