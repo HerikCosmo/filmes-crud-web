@@ -14,6 +14,12 @@ Aplicação fullstack focada em fazer um gerenciamento básico de filmes.
 
 ![diagrama](./diagrama_classes.drawio.png)
 
+## Requisitos funcionais
+
+| Requisito | Título | Descrição |
+| --- | --- | --- |
+| [RF001] | Gerenciar Filmes | O usuário poderá fazer o cadastro, a atualização e a remoção de um filme
+
 ## Tecnologias
 
 - Vue3;
@@ -22,6 +28,10 @@ Aplicação fullstack focada em fazer um gerenciamento básico de filmes.
 - Axios;
 - Spring Boot;
 - PostgreSQL.
+
+## Arquitetura
+
+![arquitetura](./diagrama_arquitetura.drawio.png)
 
 ## Rotas da API
 
