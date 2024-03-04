@@ -17,18 +17,20 @@ onBeforeMount(() => {
 </script>
 
 <template>
-  <main>
-    <ul>
-      <li v-for="movie in movies"> 
-      <h3>
-        <RouterLink 
-          :to="{ name: 'movie', params: { id: movie.id } }"
-        >
-          {{ movie.title }}
-        </RouterLink>
-      </h3>
-      <img width="128px" :src="movie.imgUrl" />
-      </li>
-    </ul>
-  </main>
+  <v-main>
+      <v-container>
+        <v-row>
+          <v-col cols="12" md="4" lg="3" v-for="movie in movies">
+            <v-card>
+              <v-img :src="movie.imgUrl" cover></v-img>
+              <v-card-text>{{ movie.title }}</v-card-text>
+              <v-card-actions>
+                <v-btn :to="{ name: 'movie', params: { id: movie.id } }">Ver Detalhes</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-col>
+          
+        </v-row>
+      </v-container>
+    </v-main>
 </template>

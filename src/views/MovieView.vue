@@ -17,10 +17,18 @@ onBeforeMount(() => {
 </script>
 
 <template>
-    <main>
-        <h1>{{ movie.title  }}</h1>
-        <p>{{ movie.year }}</p>
-        <p>{{ movie.description  }}</p>
-        <img width="256px" :src="movie.imgUrl" />
-    </main>
+    <v-main>
+        <v-container>
+            <v-row>
+                <v-col cols="4">
+                    <v-img :src="movie.imgUrl"></v-img>
+                </v-col>
+                <v-col cols="8">
+                    <h1 class="text-h2 font-weight-bold">{{ movie.title }}</h1>
+                    <p class="text-subtitle-1 mt-3">({{ movie.year }})</p>
+                    <p class="text-justify py-3">{{ movie.description }}</p>
+                </v-col>
+            </v-row>
+        </v-container>
+    </v-main>
 </template>
