@@ -18,7 +18,12 @@ const router = createRouter({
     },
     {
       path: '/movies',
-      name: 'new_movie',
+      name: 'form_movie',
+      component: FormVue
+    },
+    {
+      path: '/movies/edit/:id',
+      name: 'form_edit_movie',
       component: FormVue
     },
     {
