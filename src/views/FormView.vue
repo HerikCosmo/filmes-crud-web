@@ -1,11 +1,13 @@
 <script setup>
-import axios from 'axios';
-
-import { ref, reactive, computed } from 'vue';
+import { ref, computed, onBeforeMount  } from 'vue';
 import { useRoute,useRouter } from 'vue-router';
 import { useField, useForm } from 'vee-validate'
+import { createMovie, updateMovie, getMovie } from '@/services/movieService';
 
-const { handleSubmit, handleReset } = useForm({
+
+
+
+const { handleSubmit } = useForm({
     validationSchema: {
         title(value) {
             if(!!value) return true
@@ -25,69 +27,48 @@ const { handleSubmit, handleReset } = useForm({
     }
 })
 
-const route = useRoute()
-
 const movieId = ref(0)
 const title = useField('title')
 const year = useField('year')
 const description = useField('description')
 const imgUrl = useField('imgUrl')
 
+const route = useRoute()
+
 const isEditing = computed(() => {
     return !!route.params.id
 })
 
-if(isEditing.value) {
-    axios.get(`http://localhost:8080/movies/${route.params.id}`)
-        .then(response => {
-            const movieData = response.data
-            movieId.value = movieData.id
-            title.value.value = movieData.title
-            description.value.value = movieData.description
-            year.value.value = movieData.year
-            imgUrl.value.value = movieData.imgUrl
-        })
-        .catch(error => {
-            console.log(error)
-        })
-}
+onBeforeMount(async () => {
+    if(isEditing.value) {
+        const movieData = await getMovie(route.params.id)
+
+        movieId.value = movieData.id
+        title.value.value = movieData.title
+        description.value.value = movieData.description
+        year.value.value = movieData.year
+        imgUrl.value.value = movieData.imgUrl
+    }
+})
 
 const loading = ref(false)
 
 const router = useRouter()
 
-const saveMovie = handleSubmit(values => {
+
+const saveMovie = handleSubmit(async values => {
     loading.value = true
 
     if(isEditing.value) {
-        axios.put(`http://localhost:8080/movies/${movieId.value}`, values)
-    .then(response => {
-        router.push({ name: 'movies'})
-
-    })
-    .catch(error =>{
-        console.log(error)
-    })
-    .finally(() =>  {
-        loading.value = false
-    })
+        await updateMovie(movieId.value, values)
     } else {
-        axios.post(`http://localhost:8080/movies`, values)
-        .then(response => {
-            router.push({ name: 'movies'})
-
-        })
-        .catch(error =>{
-            console.log(error)
-        })
-        .finally(() =>  {
-            loading.value = false
-        })
+        await createMovie(values)
     }
 
+    loading.value = false
+
+    router.push({ name: 'movies'})
 })
-
-
 </script>
 
 <template>

@@ -1,11 +1,8 @@
 <script setup>
-import axios from 'axios';
 import { onBeforeMount, ref } from 'vue' 
+import { getMovies, deleteMovie } from '@/services/movieService';
 
 const movies = ref([])
-
-const movieId = ref(0)
-const movieTitle = ref('')
 
 const dialog = ref(false)
 
@@ -13,15 +10,12 @@ onBeforeMount(() => {
   populateMovies()
 })
 
-function populateMovies() {
-  axios.get('http://localhost:8080/movies')
-  .then(response => {
-    movies.value = response.data
-  })
-  .catch(error => {
-    console.log(error)
-  })
+async function populateMovies() {
+  movies.value = await getMovies()
 }
+
+const movieId = ref(0)
+const movieTitle = ref('')
 
 function deleteModal(id, title) {
   dialog.value = true
@@ -29,17 +23,12 @@ function deleteModal(id, title) {
   movieTitle.value = title
 }
 
-function deleteMovie(id) {
-  axios.delete(`http://localhost:8080/movies/${id}`)
-    .then(() => {
-      populateMovies()
-    })
-    .catch(error => {
-      console.log(error)
-    })
-    .finally(() => {
-      dialog.value = false
-    })
+async function deleteMovieModal(id) {
+  await deleteMovie(id)
+
+  populateMovies()
+
+  dialog.value = false
 }
 </script>
 
@@ -70,7 +59,7 @@ function deleteMovie(id) {
             Cancelar
           </v-btn>
 
-          <v-btn color="red" @click="deleteMovie(movieId)">
+          <v-btn color="red" @click="deleteMovieModal(movieId)">
             Sim
           </v-btn>
         </template>

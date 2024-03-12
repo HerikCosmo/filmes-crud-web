@@ -1,18 +1,13 @@
 <script setup>
 import { onBeforeMount, ref } from 'vue';
-import axios from 'axios';
 import { useRoute } from 'vue-router';
+import { getMovie } from '@/services/movieService';
 
 const movie = ref({})
 const route = useRoute()
-onBeforeMount(() => {
-    axios.get(`http://localhost:8080/movies/${route.params.id}`)
-        .then(response => {
-            movie.value = response.data
-        })
-        .catch(error => {
-            console.log(error)
-        })
+
+onBeforeMount(async () => {
+    movie.value = await getMovie(route.params.id)
 })
 </script>
 
