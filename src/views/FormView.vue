@@ -3,16 +3,35 @@ import axios from 'axios';
 
 import { ref, reactive, computed } from 'vue';
 import { useRoute,useRouter } from 'vue-router';
+import { useField, useForm } from 'vee-validate'
+
+const { handleSubmit, handleReset } = useForm({
+    validationSchema: {
+        title(value) {
+            if(!!value) return true
+
+            return 'Título é obrigatório'
+        },
+        year(value) {
+            if (!isNaN(parseInt(value))) return true;
+
+            return 'Ano não é válido';
+        },
+        description(value) {
+            if(!!value) return true
+
+            return 'Descrição é obrigatória'
+        }
+    }
+})
 
 const route = useRoute()
 
-const movie = reactive({
-    id: 0,
-    title: '',
-    description: '',
-    year: 0, 
-    imgUrl: ''
-})
+const movieId = ref(0)
+const title = useField('title')
+const year = useField('year')
+const description = useField('description')
+const imgUrl = useField('imgUrl')
 
 const isEditing = computed(() => {
     return !!route.params.id
@@ -22,54 +41,26 @@ if(isEditing.value) {
     axios.get(`http://localhost:8080/movies/${route.params.id}`)
         .then(response => {
             const movieData = response.data
-            movie.id = movieData.id
-            movie.title = movieData.title
-            movie.description = movieData.description
-            movie.year = movieData.year
-            movie.imgUrl = movieData.imgUrl
+            movieId.value = movieData.id
+            title.value.value = movieData.title
+            description.value.value = movieData.description
+            year.value.value = movieData.year
+            imgUrl.value.value = movieData.imgUrl
         })
         .catch(error => {
             console.log(error)
         })
-} else {
-    movie.id = 0,
-    movie.title =  '',
-    movie.description = '',
-    movie.year = 0, 
-    movie.imgUrl = ''
 }
-
 
 const loading = ref(false)
 
-const rules = reactive({
-    title: [
-        v => !!v || 'Título é obrigatório'
-    ],
-    year: [
-        v  => {
-        if (!isNaN(parseInt(v))) return true;
-        return 'Ano não é válido';
-        },
-    ],
-    description: [
-    v => !!v || 'Descrição é obrigatória'
-    ]
-    
-})
-
 const router = useRouter()
 
-function saveMovie() {
+const saveMovie = handleSubmit(values => {
     loading.value = true
 
     if(isEditing.value) {
-        axios.put(`http://localhost:8080/movies/${route.params.id}`, {
-        title: movie.title,
-        description: movie.description,
-        year: movie.year,
-        imgUrl: movie.imgUrl
-    })
+        axios.put(`http://localhost:8080/movies/${movieId.value}`, values)
     .then(response => {
         router.push({ name: 'movies'})
 
@@ -81,12 +72,7 @@ function saveMovie() {
         loading.value = false
     })
     } else {
-        axios.post(`http://localhost:8080/movies`, {
-        title: movie.title,
-        description: movie.description,
-        year: movie.year,
-        imgUrl: movie.imgUrl
-        })
+        axios.post(`http://localhost:8080/movies`, values)
         .then(response => {
             router.push({ name: 'movies'})
 
@@ -98,8 +84,9 @@ function saveMovie() {
             loading.value = false
         })
     }
-    
-}
+
+})
+
 
 </script>
 
@@ -115,9 +102,9 @@ function saveMovie() {
                         <v-row>
                             <v-col cols="12" md="4">
                                 <v-text-field
-                                    v-model="movie.title"
+                                    v-model="title.value.value"
+                                    :error-messages="title.errorMessage.value"
                                     label="Título"
-                                    :rules="rules.title"
                                     required
                                 >
 
@@ -125,9 +112,9 @@ function saveMovie() {
                             </v-col>
                             <v-col cols="12" md="4">
                                 <v-text-field
-                                    v-model.number="movie.year"
+                                    v-model.number="year.value.value"
+                                    :error-messages="year.errorMessage.value"                                
                                     label="Ano"
-                                    :rules="rules.year"
                                     required
                                 >
 
@@ -135,7 +122,8 @@ function saveMovie() {
                             </v-col>
                             <v-col cols="12" md="4">
                                 <v-text-field
-                                    v-model="movie.imgUrl"
+                                    v-model.number="imgUrl.value.value"
+                                    :error-messages="imgUrl.errorMessage.value"
                                     label="Link do Poster"
                                     required
                                 >
@@ -144,12 +132,12 @@ function saveMovie() {
                         </v-row>
                         <v-row>
                             <v-col cols="12">
-                                <v-textarea label="Descrição" v-model="movie.description" :rules="rules.description"></v-textarea>
+                                <v-textarea label="Descrição" v-model="description.value.value" :error-messages="description.errorMessage.value"></v-textarea>
                             </v-col>
                         </v-row>
                         <v-row>
                             <v-col cols="12">
-                                <v-btn v-if="isEditing" class="mr-2" :to="{ name: 'movie', params: { id: movie.id } }">
+                                <v-btn v-if="isEditing" class="mr-2" :to="{ name: 'movie', params: { id: movieId.value } }">
                                     Voltar
                                 </v-btn>
                                 <v-btn v-else class="mr-2" :to="{ name: 'movies'}">
