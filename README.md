@@ -47,6 +47,7 @@ Aplicação fullstack focada em fazer um gerenciamento básico de filmes.
 
 [Link para repositório backend](https://github.com/HerikCosmo/filmes-api-crud)
 
+[Link para documentação](https://github.com/HerikCosmo/fimes-crud-web/blob/main/documents/documentacao_crud_filmes.pdf)
 
 
 
