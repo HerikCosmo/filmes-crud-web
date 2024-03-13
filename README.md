@@ -31,7 +31,7 @@ Aplicação fullstack focada em fazer um gerenciamento básico de filmes.
 
 ## Arquitetura
 
-![arquitetura](./diagrama_arquitetura.drawio.png)
+![arquitetura](./diagrama_arquitetura.drawio.jpg)
 
 ## Rotas da API
 
@@ -42,3 +42,11 @@ Aplicação fullstack focada em fazer um gerenciamento básico de filmes.
 | GET         | /movies/{id} |
 | UPDATE      | /movies/{id} |
 | DELETE      | /movies/{id} |
+
+## Links
+
+[Link para repositório backend](https://github.com/HerikCosmo/filmes-api-crud)
+
+
+
+
